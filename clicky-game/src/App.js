@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { Container, Row, Col } from "./components/Grid";
 import Jumbotron from "./components/Jumbotron";
 import Nav from "./components/Nav";
+import "./style.css";
 
 class App extends Component {
   state = {
-    imagesClicked: [],
+    gameStatus: "",
+    imagesClickedIdArray: [],
     imageOrder: [],
-    score: ""
+    score: 0
   };
 
   cards = [
@@ -25,9 +27,27 @@ class App extends Component {
     },
     {
       id: 3,
+      name: "Squanchy",
+      image:
+        "https://vignette.wikia.nocookie.net/rickandmorty/images/1/16/Squanchy_.png/revision/latest?cb=20160830140218"
+    },
+    {
+      id: 4,
       name: "Rick",
       image:
         "https://upload.wikimedia.org/wikipedia/en/thumb/a/a6/Rick_Sanchez.png/160px-Rick_Sanchez.png"
+    },
+    {
+      id: 5,
+      name: "Mr. Meeseeks",
+      image:
+        "https://vignette.wikia.nocookie.net/rickandmorty/images/6/6c/MeeseeksHQ.png/revision/latest/scale-to-width-down/474?cb=20150930232412"
+    },
+    {
+      id: 6,
+      name: "Mr. Poopybutthole",
+      image:
+        "https://vignette.wikia.nocookie.net/rickandmorty/images/3/37/Mr_poopy_butthole.png/revision/latest?cb=20150819161234"
     }
   ];
 
@@ -90,15 +110,35 @@ class App extends Component {
 
   handleClickEvent = event => {
     event.preventDefault();
-    this.cardMixer(this.cards);
-    console.log(event.target.getAttribute("imageid"));
+    if (
+      this.state.imagesClickedIdArray.some(oneOfImagesId => {
+        return event.target.getAttribute("imageid") === oneOfImagesId;
+      })
+    ) {
+      this.setState({ score: 0 });
+      this.setState({ imagesClickedIdArray: [] });
+      this.setState({ gameStatus: "That was the incorrect answer!" });
+      this.cardMixer(this.cards);
+    } else {
+      this.setState({
+        imagesClicked: this.state.imagesClickedIdArray.push(
+          event.target.getAttribute("imageid")
+        )
+      });
+      this.setState({ score: this.state.score + 1 });
+      this.setState({ gameStatus: "That was the correct answer!" });
+      this.cardMixer(this.cards);
+    }
   };
 
   render() {
     return (
       <div className="App">
         <Container fluid>
-          <Nav>Clicky Game!</Nav>
+          <Nav>
+            Clicky Game! | Game Status: {this.state.gameStatus} | Score:{" "}
+            {this.state.score}
+          </Nav>
           <Jumbotron>
             <Row>
               {this.state.imageOrder.map(card => (
@@ -107,9 +147,10 @@ class App extends Component {
                     <img
                       src={card.image}
                       alt={card.name}
-                      value={`You clicked on the ${card.name} card!`}
-                      onClick={this.handleClickEvent}
+                      name={card.name}
                       imageid={card.id}
+                      className="characterImages"
+                      onClick={this.handleClickEvent}
                     />
                   </div>
                 </Col>
