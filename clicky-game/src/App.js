@@ -6,9 +6,9 @@ import "./style.css";
 
 class App extends Component {
   state = {
-    gameStatus: "",
-    imagesClickedIdArray: [],
     imageOrder: [],
+    imagesClickedIdArray: [],
+    gameStatus: "Press any image to play!",
     score: 0
   };
 
@@ -115,18 +115,20 @@ class App extends Component {
         return event.target.getAttribute("imageid") === oneOfImagesId;
       })
     ) {
-      this.setState({ score: 0 });
-      this.setState({ imagesClickedIdArray: [] });
-      this.setState({ gameStatus: "That was the incorrect answer!" });
+      this.setState({
+        score: 0,
+        imagesClickedIdArray: [],
+        gameStatus: "That was the incorrect answer!"
+      });
       this.cardMixer(this.cards);
     } else {
       this.setState({
         imagesClicked: this.state.imagesClickedIdArray.push(
           event.target.getAttribute("imageid")
-        )
+        ),
+        score: this.state.score + 1,
+        gameStatus: "That was the correct answer!"
       });
-      this.setState({ score: this.state.score + 1 });
-      this.setState({ gameStatus: "That was the correct answer!" });
       this.cardMixer(this.cards);
     }
   };
@@ -135,10 +137,11 @@ class App extends Component {
     return (
       <div className="App">
         <Container fluid>
-          <Nav>
-            Clicky Game! | Game Status: {this.state.gameStatus} | Score:{" "}
-            {this.state.score}
-          </Nav>
+          <Nav
+            message={this.state.gameStatus}
+            score={this.state.score}
+            children="Clicky Game!"
+          />
           <Jumbotron>
             <Row>
               {this.state.imageOrder.map(card => (
