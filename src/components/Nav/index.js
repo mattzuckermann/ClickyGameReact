@@ -1,19 +1,25 @@
 import React from "react";
+import "./style.css";
 
-function Nav({ children, message, score }) {
+function Nav({ children, message, score, topScore }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div>
         <div>
-          <a className="navbar-brand" href="/">
-            {children}
-          </a>
+          <h1>
+            <a className="navbar-brand navSub" href="/">
+              {children}
+            </a>
+          </h1>
         </div>
         <div>
-          <div className="navbar-brand">{message}</div>
+          <div className="navbar-brand navSub">{message}</div>
         </div>
         <div>
-          <div className="navbar-brand">Current Score: {score}</div>
+          <div className="navbar-brand navSub">Current Score: {score}</div>
+        </div>
+        <div>
+          <div className="navbar-brand navSub">Top Score: {topScore}</div>
         </div>
       </div>
     </nav>

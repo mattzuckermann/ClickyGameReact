@@ -9,7 +9,8 @@ class App extends Component {
     imageOrder: [],
     imagesClickedIdArray: [],
     gameStatus: "Press any image to play!",
-    score: 0
+    score: 0,
+    topScore: 0
   };
 
   cards = [
@@ -129,6 +130,9 @@ class App extends Component {
         score: this.state.score + 1,
         gameStatus: "That was the correct answer!"
       });
+      if (this.state.score === this.state.topScore) {
+        this.setState({ topScore: this.state.topScore + 1 });
+      }
       this.cardMixer(this.cards);
     }
   };
@@ -140,6 +144,7 @@ class App extends Component {
           <Nav
             message={this.state.gameStatus}
             score={this.state.score}
+            topScore={this.state.topScore}
             children="Clicky Game!"
           />
           <Jumbotron>
